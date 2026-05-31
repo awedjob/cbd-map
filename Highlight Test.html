@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)file:///C:/Users/AwedJob/Downloads/test_highlight.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Highlight Test</title>
+</head>
+<body>
+<p id="msg">Click a cell to select it</p>
+<table id="grid" style="border-collapse:collapse;margin:20px"><tr data-y="150"><td data-x="-126" data-y="150" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-126,150</td><td data-x="-125" data-y="150" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-125,150</td><td data-x="-124" data-y="150" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-124,150</td></tr><tr data-y="149"><td data-x="-126" data-y="149" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-126,149</td><td data-x="-125" data-y="149" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-125,149</td><td data-x="-124" data-y="149" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-124,149</td></tr><tr data-y="148"><td data-x="-126" data-y="148" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-126,148</td><td data-x="-125" data-y="148" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-125,148</td><td data-x="-124" data-y="148" style="width: 40px; height: 40px; border: 1px solid rgb(153, 153, 153); background: rgb(221, 221, 221); cursor: pointer; text-align: center; font-size: 9px;">-124,148</td></tr></table>
+<script>
+const coords = [
+  [-126,150],[-125,150],[-124,150],
+  [-126,149],[-125,149],[-124,149],
+  [-126,148],[-125,148],[-124,148]
+];
+
+const selected = new Set();
+const cellMap = {};
+const table = document.getElementById('grid');
+
+coords.forEach(([x,y]) => {
+  let tr = table.querySelector('tr[data-y="'+y+'"]');
+  if(!tr){ tr = document.createElement('tr'); tr.dataset.y=y; table.appendChild(tr); }
+  const td = document.createElement('td');
+  td.style.width = '40px';
+  td.style.height = '40px';
+  td.style.border = '1px solid #999';
+  td.style.background = '#ddd';
+  td.style.cursor = 'pointer';
+  td.style.textAlign = 'center';
+  td.style.fontSize = '9px';
+  td.textContent = x+','+y;
+  td.dataset.x = x;
+  td.dataset.y = y;
+  cellMap[x+','+y] = td;
+  td.addEventListener('click', function(){
+    const key = x+','+y;
+    if(selected.has(key)){
+      selected.delete(key);
+      td.style.background = '#ddd';
+    } else {
+      selected.add(key);
+      td.style.background = '#FF4500';
+    }
+    document.getElementById('msg').textContent = selected.size + ' selected: ' + [...selected].join(', ');
+  });
+  tr.appendChild(td);
+});
+</script>
+
+
+</body></html>
