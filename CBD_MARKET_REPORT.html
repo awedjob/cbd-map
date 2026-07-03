@@ -14,9 +14,8 @@
   tr:nth-child(even) { background: #f6f8fb; }
   .callout { background: #dbe7f8; border-left: 5px solid #00204d; padding: 12px 16px; border-radius: 4px; margin: 14px 0; }
   .warn { background: #fff6d9; border-left: 5px solid #c2b56f; padding: 12px 16px; border-radius: 4px; margin: 14px 0; }
-  .scrolltable { page-break-inside: avoid; margin-bottom: 20px; }
-  .scrolltable table { margin-bottom: 0; }
-  @media print { .scrolltable table { font-size: 11px; } }
+  .scrolltable { max-height: 460px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; }
+  .scrolltable th { position: sticky; top: 0; }
   .small { font-size: 0.85em; color: #555; }
 </style>
 </head>
@@ -94,7 +93,7 @@
 <strong>How the manipulation actually works — an honest accounting.</strong> Across all 671 syndicate seller-side sales (473 distinct parcels), the aggregate is <strong>-5.5% vs quarter medians</strong> ($73,260 received vs $77,528 at median) — i.e., their bulk business is <em>spread capture</em>: buy below median from the liquidator, resell at market in volume. The manipulation is <em>selective</em>: <strong>267 sales (40%) closed above median, at an average +13% inflation</strong> — including same-day round trips whose only purpose is printing a high "last sale" sticker on specific parcels. The danger is not their average price; it is trusting the displayed price of any parcel they touched.
 </div>
 
-<p><strong>All 671 syndicate sales</strong>, sorted worst-inflation first:</p>
+<p><strong>All 671 syndicate sales</strong>, sorted worst-inflation first (scroll):</p>
 <div class="scrolltable">
 <table>
 <tr><th>Parcel</th><th>Date</th><th>From (seller)</th><th>To (buyer)</th><th>Price</th><th>Quarter median</th><th>Inflation</th></tr>
