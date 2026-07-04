@@ -36,16 +36,16 @@
 
   <div id="layer-toggles" style="max-width: 960px; background: white; margin-bottom: 14px; padding: 12px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 13px;">
     <strong>Layers:</strong>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="b1"> &lt;$75</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="b2"> $75–100</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="b3"> $100–150</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="b4"> $150–250</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="b5"> &gt;$250</label>
-    <label style="margin-left:14px;"><input type="checkbox" checked data-layer="unsold"> Never sold</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="b1"> &lt;$75</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="b2"> $75–100</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="b3"> $100–150</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="b4"> $150–250</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="b5"> &gt;$250</label>
+    <label style="margin-left:14px;"><input type="checkbox" data-layer="unsold"> Never sold</label>
     <label style="margin-left:14px;"><input type="checkbox" checked data-layer="cbd"> CBD hatching</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="estate"> Estate dots</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="flags"> Inflated ✕</label>
-    <label style="margin-left:10px;"><input type="checkbox" checked data-layer="mana"> MANA slash</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="estate"> Estate dots</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="flags"> Inflated ✕</label>
+    <label style="margin-left:10px;"><input type="checkbox" data-layer="mana"> MANA slash</label>
     <span style="margin-left:16px; color:#666;">💡 Ctrl+Click (Cmd+Click on Mac) any parcel → its OpenSea page</span>
   </div>
 
@@ -113,7 +113,7 @@
     }
 
     // ── Layer state (driven by the checkboxes above the map) ──
-    const layers = { b1: true, b2: true, b3: true, b4: true, b5: true, unsold: true, cbd: true, estate: true, flags: true, mana: true };
+    const layers = { b1: false, b2: false, b3: false, b4: false, b5: false, unsold: false, cbd: true, estate: false, flags: false, mana: false };
 
     function bucketOf(p) {
       const v = p.usd;
