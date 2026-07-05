@@ -14,9 +14,11 @@
   tr:nth-child(even) { background: #f6f8fb; }
   .callout { background: #dbe7f8; border-left: 5px solid #00204d; padding: 12px 16px; border-radius: 4px; margin: 14px 0; }
   .warn { background: #fff6d9; border-left: 5px solid #c2b56f; padding: 12px 16px; border-radius: 4px; margin: 14px 0; }
-  .scrolltable { page-break-inside: avoid; margin-bottom: 20px; }
+  .scrolltable { max-height: 420px; overflow-y: auto; border: 1px solid #d5d5d5; border-radius: 6px; margin-bottom: 20px; }
   .scrolltable table { margin-bottom: 0; }
-  @media print { .scrolltable table { font-size: 11px; } }
+  .scrolltable thead th, .scrolltable table tr:first-child th { position: sticky; top: 0; }
+  /* PDF/print: expand tables fully so nothing is clipped */
+  @media print { .scrolltable { max-height: none; overflow: visible; border: none; page-break-inside: avoid; } .scrolltable table { font-size: 11px; } }
   .small { font-size: 0.85em; color: #555; }
 </style>
 </head>
@@ -855,35 +857,36 @@
 <p><strong>B. Cheapest active listings</strong> (all listings remain above fair — bid, don't buy):</p>
 <table>
 <tr><th>Location</th><th>Name</th><th>Ask</th><th>≈USD/parcel</th></tr>
-<tr><td>6-parcel estate @ (-75,137)</td><td>"Last  Vegas  City"</td><td>8,410 MANA</td><td>$100/parcel</td></tr>
-<tr><td>(-86,86)</td><td>"Parcel"</td><td>1,986 MANA</td><td>$142/parcel</td></tr>
-<tr><td>(-142,135)</td><td>"Parcel"</td><td>2,000 MANA</td><td>$143/parcel</td></tr>
-<tr><td>(-112,116)</td><td>"Parcel"</td><td>2,000 MANA</td><td>$143/parcel</td></tr>
-<tr><td>(-104,104)</td><td>"Parcel"</td><td>3,000 MANA</td><td>$214/parcel</td></tr>
+<tr><td>9-parcel estate @ (-84,144)</td><td>"Vertex"</td><td>11,999 MANA</td><td>$95/parcel</td></tr>
+<tr><td>(-86,86)</td><td>"Parcel"</td><td>1,986 MANA</td><td>$141/parcel</td></tr>
+<tr><td>(-142,135)</td><td>"Parcel"</td><td>2,000 MANA</td><td>$142/parcel</td></tr>
+<tr><td>(-112,116)</td><td>"Parcel"</td><td>2,000 MANA</td><td>$142/parcel</td></tr>
+<tr><td>4-parcel estate @ (-87,141)</td><td>"Orivex Cluster"</td><td>9,000 MANA</td><td>$159/parcel</td></tr>
 </table>
 <p><strong>C. Estate-building clusters.</strong> 55 contiguous free clusters exist (see <code>free_clusters.json</code>); the standout is the 55-parcel block at (−132…−125, 83…93) — an entire mergeable estate for roughly 3,795 USD at fair prices. Estates must be edge-contiguous, so contiguous pickups are worth more than scattered ones.</p>
 
 <h2>5. CBD Community Roster &amp; Holdings</h2>
 <div class="callout">
-<strong>23 members · 38 registered wallets · NaN parcels held in the NW quadrant</strong> (individual + estate holdings attributed via the owner directory). The community acquired 358+ parcels for ≈$46,163 through the liquidation — average $129/parcel, with 2025–26 buyers averaging near fair. Only 17 of 358 purchases (4.7%) were made at ≥1.4× median.
+<strong>24 members · 39 registered wallets · 682 parcels held in the NW quadrant</strong> (live from the cbd-map — the community's confirmed ownership record in Supabase). The community acquired 358+ parcels for ≈$46,163 through the liquidation — average $129/parcel, with 2025–26 buyers averaging near fair. Only 17 of 358 purchases (4.7%) were made at ≥1.4× median.
 </div>
 <table>
 <tr><th>Member</th><th>Known aliases</th><th>Wallets</th><th>NW parcels held</th></tr>
 <tr><td>Billy</td><td>—</td><td style="text-align:center;">6</td><td style="text-align:right;">90</td></tr>
-<tr><td>MEW</td><td>Sinful, SinfulMeatStick, MewStudios</td><td style="text-align:center;">2</td><td style="text-align:right;">87</td></tr>
+<tr><td>MEW</td><td>Sinful, SinfulMeatStick, MewStudios</td><td style="text-align:center;">2</td><td style="text-align:right;">88</td></tr>
+<tr><td>Old Guy</td><td>—</td><td style="text-align:center;">2</td><td style="text-align:right;">66</td></tr>
 <tr><td>Alan</td><td>AlanHowick on OpenSea (confirmed by AwedJob July 2, 2026)</td><td style="text-align:center;">1</td><td style="text-align:right;">62</td></tr>
-<tr><td>Canessa</td><td>—</td><td style="text-align:center;">3</td><td style="text-align:right;">54</td></tr>
+<tr><td>Canessa</td><td>—</td><td style="text-align:center;">3</td><td style="text-align:right;">57</td></tr>
 <tr><td>MetaWolf</td><td>—</td><td style="text-align:center;">2</td><td style="text-align:right;">53</td></tr>
-<tr><td>Fancy</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">51</td></tr>
-<tr><td>Old Guy</td><td>—</td><td style="text-align:center;">2</td><td style="text-align:right;">49</td></tr>
-<tr><td>AwedJob</td><td>AJ, FAFO</td><td style="text-align:center;">5</td><td style="text-align:right;">42</td></tr>
-<tr><td>Mery</td><td>MeryElf on DCL); MeryElf</td><td style="text-align:center;">1</td><td style="text-align:right;">25</td></tr>
+<tr><td>Fancy</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">52</td></tr>
+<tr><td>AwedJob</td><td>AJ, FAFO</td><td style="text-align:center;">5</td><td style="text-align:right;">44</td></tr>
+<tr><td>Mery</td><td>MeryElf on DCL); MeryElf</td><td style="text-align:center;">1</td><td style="text-align:right;">30</td></tr>
 <tr><td>Jarod</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">22</td></tr>
 <tr><td>1Exist</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">19</td></tr>
 <tr><td>Alpha Angels</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">19</td></tr>
+<tr><td>emm</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">13</td></tr>
 <tr><td>Roustan</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">10</td></tr>
-<tr><td>emm</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">10</td></tr>
 <tr><td>MetaRyuk</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">9</td></tr>
+<tr><td>JayKaying</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">7</td></tr>
 <tr><td>Brandon</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">4</td></tr>
 <tr><td>Hayabusa</td><td>—</td><td style="text-align:center;">2</td><td style="text-align:right;">4</td></tr>
 <tr><td>Rishi</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">4</td></tr>
@@ -893,7 +896,7 @@
 <tr><td>MetaTiger</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">1</td></tr>
 <tr><td>Clo</td><td>—</td><td style="text-align:center;">1</td><td style="text-align:right;">0</td></tr>
 </table>
-<p class="small">Holdings count both individual parcels and parcels inside member-owned estates. Members with 0 may hold outside the region or under unregistered wallets.</p>
+<p class="small">Holdings are counted live from the cbd-map (Supabase), the community's authoritative ownership record. Per-member counts may not sum exactly to the total: a few parcels are held under community or unregistered names (e.g. the CBD entity and the 2026 Land Grant awardees), and the four pledged grant parcels appear on the map under both AJ and the awardee.</p>
 
 <h2>6. The "Never Sold" Parcels (3,364 — 50% of the region)</h2>
 <p>Nearly half the quadrant has <strong>no sale transaction on any venue, ever</strong> — verified against OpenSea, the DCL Marketplace, and raw Ethereum receipts (which catch even off-market deals). Their history is: minted to Decentral Games' distribution wallet in 2018 → transferred into DG estates (the EstateRegistry contract) → at most shuffled between DG-controlled wallets during the liquidation, with no payment ever changing hands.</p>
