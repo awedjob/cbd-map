@@ -430,9 +430,16 @@ async function loadFromDB(){
   setStatus('Loading parcel data...','loading');
   document.getElementById('info-bar').textContent='Loading...';
   try{
-    const res=await fetch(API+'?select=x,y,owner&limit=10000',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const rows=await res.json();
+    // Supabase caps each response at 1000 rows — page through all of them.
+    let rows=[]; let offset=0;
+    while(true){
+      const res=await fetch(API+'?select=x,y,owner&order=id&limit=1000&offset='+offset,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const page=await res.json();
+      rows=rows.concat(page);
+      if(page.length<1000) break;
+      offset+=1000;
+    }
     if(rows.length===0&&!dbSeeded){
       await seedDatabase();
     } else {
