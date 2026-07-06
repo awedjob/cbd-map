@@ -164,16 +164,16 @@ function tokenId(x,y){ return ((BigInt(x)&MASK)*FACTOR+(BigInt(y)&MASK)).toStrin
 function opensea(x,y){ return 'https://opensea.io/assets/ethereum/'+CONTRACT+'/'+tokenId(x,y); }
 
 // ── Colors ───────────────────────────────────────────────────
-const AUTO_PALETTE = ['#D4A017','#1A7A6E','#7D3C98','#1F618D','#784212','#1E8449','#5D6D7E','#117A65','#6C3483','#1A5276','#7E5109','#922B21','#4A235A'];
+const AUTO_PALETTE = ['#C44231','#D27D4B','#C48931','#D2BC4B','#ABB356','#A7C072','#7EB356','#66D24B','#31C436','#4BD272','#31C47D','#4BD2B3','#31C4C4','#4BB3D2','#317DC4','#4B72D2','#3136C4','#664BD2','#7131C4','#A74BD2','#B831C4','#D24BBC','#C43189','#D24B7D','#C43142'];
 let autoPaletteIdx = 0;
 const COLORS = {
-  'Billy':'#4A8FD4','AJ':'#E0724A','Jarod':'#8B78E6','Bay Watch':'#26A69A',
-  'Alpha Angels':'#E91E8C','Mery':'#9C62E8',
-  'MEW':'#7B52A8','emm':'#E8A000','CBD':'#8D6048','Brandon':'#C0844A',
-  'Alan':'#3A7FB5','Hayabusa':'#D63030','JasonX':'#888888','Jar0d':'#6B5EA8',
-  '1Exist':'#E05C3A','MetaTribe':'#2E8B57','MetaTiger':'#C8960A','ZOM':'#B03020',
-  'Old Guy':'#6D5046','Rishi':'#009DC4','Clo':'#D91A8C','Fancy':'#8E24AA',
-  'Creative Sports Vibing':'#E07800','MGD':'#607D8B','Road':'#b0b0b0','Canessa':'#E07B8A',
+  '1Exist':'#B82E2E','AJ':'#CF613F','Alan':'#B8702E','Alpha Angels':'#CFA63F',
+  'Bay Watch':'#ACA94D','Billy':'#AABB68','Brandon':'#83AC4D','CBD':'#6DCF3F',
+  'Clo':'#39B82E','Creative Sports Vibing':'#3FCF57','Fancy':'#2EB865','Hayabusa':'#3FCF9A',
+  'Jar0d':'#2EB8A8','Jarod':'#3FBECF','JasonX':'#2E85B8','MGD':'#3F79CF',
+  'Mery':'#2E45B8','MetaTiger':'#4B3FCF','MetaTribe':'#5A2EB8','MEW':'#913FCF',
+  'Old Guy':'#9C2EB8','Rishi':'#CF3FCA','ZOM':'#B82E91','Canessa':'#CF3F85',
+  'emm':'#B82E4E','Road':'#b0b0b0',
 };
 function colorFor(n){
   if(!n) return '#f0f0ee';
