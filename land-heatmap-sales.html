@@ -81,7 +81,7 @@
     const minY = 63, maxY = 150;
 
     canvas.width = (maxX - minX + 1) * cellSize + 100; // 80 left (y-axis labels) + 20 right
-    canvas.height = (maxY - minY + 1) * cellSize + 100; // 20 top + 80 bottom (x-axis labels)
+    canvas.height = (maxY - minY + 1) * cellSize + 40; // 20 top (x-axis labels) + 20 bottom
 
     // Cividis-based scale: perceptually uniform, safe for all color-vision deficiencies.
     // Luminance rises monotonically with price (darker = cheaper, brighter = pricier).
@@ -225,7 +225,7 @@
       ctx.fillStyle = '#666';
       ctx.font = '11px Arial';
       for (let x = minX; x <= maxX; x += 10) {
-        ctx.fillText(x, (x - minX) * cellSize + 80 - 20, canvas.height - 50);
+        ctx.fillText(x, (x - minX) * cellSize + 80 - 10, 14); // top, like the cbd-map
       }
       for (let y = 150; y >= 70; y -= 10) {
         if (y > maxY || y < minY) continue;
