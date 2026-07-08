@@ -81,7 +81,7 @@
     const minY = 63, maxY = 150;
 
     canvas.width = (maxX - minX + 1) * cellSize + 160;
-    canvas.height = (maxY - minY + 1) * cellSize + 160;
+    canvas.height = (maxY - minY + 1) * cellSize + 100; // 20 top + 80 bottom (x-axis labels)
 
     // Cividis-based scale: perceptually uniform, safe for all color-vision deficiencies.
     // Luminance rises monotonically with price (darker = cheaper, brighter = pricier).
@@ -125,7 +125,7 @@
       for (let x = minX; x <= maxX; x++) {
         for (let y = minY; y <= maxY; y++) {
           const px = (x - minX) * cellSize + 80;
-          const py = (maxY - y) * cellSize + 80;
+          const py = (maxY - y) * cellSize + 20;
           const p = parcelMap.get(x + ',' + y);
 
           if (!p) {
@@ -182,7 +182,7 @@
           const [x, y] = key.split(',').map(Number);
           if (x < minX || x > maxX || y < minY || y > maxY) return;
           const px = (x - minX) * cellSize + 80;
-          const py = (maxY - y) * cellSize + 80;
+          const py = (maxY - y) * cellSize + 20;
           ctx.save();
           ctx.beginPath();
           ctx.rect(px, py, cellSize, cellSize);
@@ -205,7 +205,7 @@
           const [x, y] = key.split(',').map(Number);
           if (x < minX || x > maxX || y < minY || y > maxY) return;
           const px = (x - minX) * cellSize + 80;
-          const py = (maxY - y) * cellSize + 80;
+          const py = (maxY - y) * cellSize + 20;
           if (L.wash) {
             ctx.strokeStyle = '#ff1a1a';
             ctx.lineWidth = 2;
@@ -229,7 +229,7 @@
       }
       for (let y = 150; y >= 70; y -= 10) {
         if (y > maxY || y < minY) continue;
-        ctx.fillText(y, 20, (maxY - y) * cellSize + 80 + 5);
+        ctx.fillText(y, 20, (maxY - y) * cellSize + 20 + 5);
       }
     }
     draw();
@@ -282,7 +282,7 @@
       if (!(e.ctrlKey || e.metaKey)) return;
       const rect = canvas.getBoundingClientRect();
       const x = Math.floor((e.clientX - rect.left - 80) / cellSize) + minX;
-      const y = maxY - Math.floor((e.clientY - rect.top - 80) / cellSize);
+      const y = maxY - Math.floor((e.clientY - rect.top - 20) / cellSize);
       if (x < minX || x > maxX || y < minY || y > maxY) return;
       const key = x + ',' + y;
       const L = listings.get(key);
@@ -307,7 +307,7 @@
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
       const x = Math.floor((e.clientX - rect.left - 80) / cellSize) + minX;
-      const y = maxY - Math.floor((e.clientY - rect.top - 80) / cellSize);
+      const y = maxY - Math.floor((e.clientY - rect.top - 20) / cellSize);
       const info = document.getElementById('info');
 
       if (x < minX || x > maxX || y < minY || y > maxY) { info.style.display = 'none'; return; }
