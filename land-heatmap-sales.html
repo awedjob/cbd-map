@@ -1,58 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LAND Sales Heatmap - Interim (band y80-105 in progress)</title>
+  <title>North West Genesis City</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 20px; }
     #map { display: inline-block; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     #info { position: fixed; top: 20px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); min-width: 320px; display: none; z-index: 1000; font-size: 13px; line-height: 1.5; }
     canvas { border: 2px solid #333; cursor: crosshair; display: block; }
-    .legend { margin-bottom: 20px; font-size: 14px; }
-    .legend-item { display: inline-block; margin-right: 22px; margin-bottom: 8px; }
-    .legend-color { display: inline-block; width: 20px; height: 20px; margin-right: 7px; vertical-align: middle; border: 1px solid #999; }
+    #layer-toggles label { margin-right: 14px; white-space: nowrap; display: inline-block; margin-bottom: 6px; }
+    .sw { display: inline-block; width: 15px; height: 15px; margin: 0 4px 0 3px; vertical-align: text-bottom; border: 1px solid #999; position: relative; overflow: hidden; }
   </style>
 </head>
 <body>
-  <h1>LAND Sales Price Heatmap — USD</h1>
-  <p><strong>Genesis City NW Quadrant</strong> · Last-sale price per parcel in USD at time of sale (2024–2026 DG liquidation era)</p>
-  <p>Scrape in progress: <strong>6776</strong> parcels collected so far · <strong>3412</strong> with sales · <strong>462</strong> bought by trusted CBD members</p>
-  <p>USD sale range so far: <strong>$45 – $13954</strong> · median <strong>$135</strong> · 2026 fair zone: <strong>$64–$85</strong></p>
-
-  <div class="legend">
-    <div style="margin-bottom: 10px;"><strong>Last Sale Price (USD at time of sale)</strong> — colorblind-friendly scale: darker = cheaper, brighter = pricier:</div>
-    <div class="legend-item"><span class="legend-color" style="background:#00204d;"></span> &lt; $75 (cheapest — dark navy)</div>
-    <div class="legend-item"><span class="legend-color" style="background:#31446b;"></span> $75–100 (near fair — blue)</div>
-    <div class="legend-item"><span class="legend-color" style="background:#7c7b78;"></span> $100–150 (gray)</div>
-    <div class="legend-item"><span class="legend-color" style="background:#c2b56f;"></span> $150–250 (tan)</div>
-    <div class="legend-item"><span class="legend-color" style="background:#ffea46;"></span> &gt; $250 (2024 peak — bright yellow)</div>
-    <div class="legend-item"><span class="legend-color" style="background:#ffffff; position:relative; overflow:hidden;"><span style="position:absolute; left:-3px; top:8px; width:30px; height:3px; background:#000; transform:rotate(-45deg);"></span></span> MANA sale (black slash; colored by USD like the rest)</div>
-    <div style="margin-top: 8px;">
-      <div class="legend-item"><span class="legend-color" style="background:#ffffff;"></span> Never sold</div>
-      <div class="legend-item"><span class="legend-color" style="background: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.65) 3px, rgba(0,0,0,0.65) 4px);"></span> CBD territory (\\ hatching)</div>
-      <div class="legend-item"><span class="legend-color" style="background:#fff; position:relative;"><span style="position:absolute; left:8px; top:8px; width:4px; height:4px; background:#000; border-radius:50%;"></span></span> Estate-locked (center dot — only sold as whole estate)</div>
-      <div class="legend-item"><span class="legend-color" style="background:#fff; position:relative; font-weight:bold; text-align:center; line-height:18px;">✕</span> Inflated last sale (X — do not trust displayed price)</div>
-      <div class="legend-item"><span class="legend-color" style="background:#fff; position:relative;"><span style="position:absolute; left:6px; top:6px; width:6px; height:6px; background:#12e000; border-radius:50%; border:0.5px solid rgba(0,0,0,0.6);"></span></span> For sale — new listing (green dot; DCL + OpenSea, scanned every 3 days)</div>
-      <div class="legend-item"><span class="legend-color" style="background:#fff; border:2px solid #ff1a1a; box-sizing:border-box;"></span> …listed by a flagged wash-trader (red outline)</div>    </div>
-  </div>
-
-  <div id="layer-toggles" style="max-width: 960px; background: white; margin-bottom: 14px; padding: 12px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 13px;">
-    <strong>Layers:</strong>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="b1"> &lt;$75</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="b2"> $75–100</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="b3"> $100–150</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="b4"> $150–250</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="b5"> &gt;$250</label>
-    <label style="margin-left:14px;"><input type="checkbox" data-layer="unsold"> Never sold</label>
-    <label style="margin-left:14px;"><input type="checkbox" checked data-layer="cbd"> CBD hatching</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="estate"> Estate dots</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="flags"> Inflated ✕</label>
-    <label style="margin-left:10px;"><input type="checkbox" data-layer="mana"> MANA slash</label>
-    <label style="margin-left:14px;"><input type="checkbox" data-layer="listings"> 🟢 For sale</label>
-    <span style="margin-left:16px; color:#666;">💡 Ctrl+Click (Cmd+Click on Mac) any parcel → its marketplace page (estate parcels open the whole estate, since they can't be bought individually)</span>
-    <div id="cbd-sync" style="margin-top:6px; color:#00204d; font-weight:bold;">CBD hatching: loading from cbd-map database…</div>
-  </div>
+  <h1>North West Genesis City</h1>
 
   <div id="map"><canvas id="canvas"></canvas></div>
+
+  <div id="layer-toggles" style="max-width: 960px; background: white; margin-top: 20px; padding: 12px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 13px;">
+    <strong>Layers</strong> <span style="color:#666;">(last-sale price, USD at time of sale — darker = cheaper, brighter = pricier):</span><br>
+    <label><input type="checkbox" data-layer="b1"> <span class="sw" style="background:#00204d;"></span>&lt;$75</label>
+    <label><input type="checkbox" data-layer="b2"> <span class="sw" style="background:#31446b;"></span>$75–100</label>
+    <label><input type="checkbox" data-layer="b3"> <span class="sw" style="background:#7c7b78;"></span>$100–150</label>
+    <label><input type="checkbox" data-layer="b4"> <span class="sw" style="background:#c2b56f;"></span>$150–250</label>
+    <label><input type="checkbox" data-layer="b5"> <span class="sw" style="background:#ffea46;"></span>&gt;$250</label>
+    <label><input type="checkbox" data-layer="unsold"> <span class="sw" style="background:#ffffff;"></span>Never sold</label>
+    <label><input type="checkbox" checked data-layer="cbd"> <span class="sw" style="background: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.65) 3px, rgba(0,0,0,0.65) 4px);"></span>CBD territory</label>
+    <label><input type="checkbox" data-layer="estate"> <span class="sw" style="background:#fff;"><span style="position:absolute; left:5px; top:5px; width:4px; height:4px; background:#000; border-radius:50%;"></span></span>Estate-locked</label>
+    <label><input type="checkbox" data-layer="flags"> <span class="sw" style="background:#fff; font-weight:bold; text-align:center; line-height:13px; font-size:11px;">✕</span>Inflated last sale</label>
+    <label><input type="checkbox" data-layer="mana"> <span class="sw" style="background:#fff;"><span style="position:absolute; left:-4px; top:6px; width:24px; height:2px; background:#000; transform:rotate(-45deg);"></span></span>MANA sale</label>
+    <label><input type="checkbox" data-layer="listings"> <span class="sw" style="background:#fff;"><span style="position:absolute; left:4px; top:4px; width:6px; height:6px; background:#12e000; border-radius:50%; border:0.5px solid rgba(0,0,0,0.6);"></span></span>For sale</label>
+    <span style="white-space:nowrap;"><span class="sw" style="background:#fff; border:2px solid #ff1a1a; box-sizing:border-box;"></span><span style="color:#666;">= wash-trader listing (shows with For sale)</span></span>
+    <div style="margin-top:6px; color:#666;">💡 Ctrl+Click (Cmd+Click on Mac) any parcel → its marketplace page (estate parcels open the whole estate, since they can't be bought individually)</div>
+    <div id="cbd-sync" style="margin-top:6px; color:#00204d; font-weight:bold;">CBD hatching: loading from cbd-map database…</div>
+  </div>
 
   <div id="offer-tool" style="max-width: 720px; background: white; margin-top: 20px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 14px;">
     <h3 style="margin-top: 0;">💱 Offer Price Converter</h3>
