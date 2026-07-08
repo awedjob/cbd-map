@@ -19,7 +19,7 @@
   <div id="layer-toggles" style="max-width: 960px; background: white; margin-top: 20px; padding: 12px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 13px;">
     <strong>Layers</strong> <span style="color:#666;">(last-sale price, USD at time of sale — darker = cheaper, brighter = pricier):</span><br>
     <label><input type="checkbox" data-layer="b1"> <span class="sw" style="background:#00204d;"></span>&lt;$75</label>
-    <label><input type="checkbox" data-layer="b2"> <span class="sw" style="background:#31446b;"></span>$75–100</label>
+    <label><input type="checkbox" data-layer="b2"> <span class="sw" style="background:#4d6398;"></span>$75–100</label>
     <label><input type="checkbox" data-layer="b3"> <span class="sw" style="background:#7c7b78;"></span>$100–150</label>
     <label><input type="checkbox" data-layer="b4"> <span class="sw" style="background:#c2b56f;"></span>$150–250</label>
     <label><input type="checkbox" data-layer="b5"> <span class="sw" style="background:#ffea46;"></span>&gt;$250</label>
@@ -90,7 +90,7 @@
       const v = p.usd;
       if (v == null || v <= 0) return '#ffffff'; // sale with unknown USD value
       if (v < 75) return '#00204d';
-      if (v < 100) return '#31446b';
+      if (v < 100) return '#4d6398';
       if (v < 150) return '#7c7b78';
       if (v < 250) return '#c2b56f';
       return '#ffea46';
