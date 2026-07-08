@@ -29,7 +29,9 @@
     <label><input type="checkbox" data-layer="flags"> <span class="sw" style="background:#fff; font-weight:bold; text-align:center; line-height:13px; font-size:11px;">✕</span>Inflated last sale</label>
     <label><input type="checkbox" data-layer="mana"> <span class="sw" style="background:#fff;"><span style="position:absolute; left:-4px; top:6px; width:24px; height:2px; background:#000; transform:rotate(-45deg);"></span></span>MANA sale</label>
     <label><input type="checkbox" data-layer="listings"> <span class="sw" style="background:#fff;"><span style="position:absolute; left:4px; top:4px; width:6px; height:6px; background:#12e000; border-radius:50%; border:0.5px solid rgba(0,0,0,0.6);"></span></span>For sale</label>
+    <label><input type="checkbox" data-layer="border"> <span class="sw" style="background:#fff; border-left:4px solid #0066ff; border-right:4px solid #ff8c00; box-sizing:border-box;"></span>Border parcels</label>
     <span style="white-space:nowrap;"><span class="sw" style="background:#fff; border:2px solid #ff1a1a; box-sizing:border-box;"></span><span style="color:#666;">= wash-trader listing (shows with For sale)</span></span>
+    <br><span style="color:#666;">Border: <span style="color:#0066ff; font-weight:bold;">blue</span> = city edge (W&nbsp;x=−150, N&nbsp;y=150) · <span style="color:#ff8c00; font-weight:bold;">orange</span> = double road (E, S) — exposed sides no neighbor can ever build on</span>
     <div style="margin-top:6px; color:#666;">💡 Ctrl+Click (Cmd+Click on Mac) any parcel → its marketplace page (estate parcels open the whole estate, since they can't be bought individually)</div>
     <div id="cbd-sync" style="margin-top:6px; color:#00204d; font-weight:bold;">CBD hatching: loading from cbd-map database…</div>
   </div>
@@ -57,6 +59,7 @@
     <div id="sale"></div>
     <div id="parties"></div>
     <div id="cbd"></div>
+    <div id="border"></div>
     <div id="listing" style="font-weight:bold;"></div>
   </div>
 
@@ -97,7 +100,7 @@
     }
 
     // ── Layer state (driven by the checkboxes above the map) ──
-    const layers = { b1: false, b2: false, b3: false, b4: false, b5: false, unsold: false, cbd: true, estate: false, flags: false, mana: false, listings: false };
+    const layers = { b1: false, b2: false, b3: false, b4: false, b5: false, unsold: false, cbd: true, estate: false, flags: false, mana: false, listings: false, border: false };
 
     function bucketOf(p) {
       const v = p.usd;
@@ -219,6 +222,33 @@
           ctx.strokeStyle = 'rgba(0,0,0,0.6)';
           ctx.stroke();
         });
+      }
+
+      // Border-premium overlay: the district is one solid 6,776-parcel block, so exposure
+      // is perimeter-only. Mark each perimeter parcel's exposed side:
+      //   blue  = city boundary (west x=-150, north y=150) — permanent open view/privacy
+      //   orange = double road (east, south) — visibility/foot-traffic frontage
+      if (layers.border) {
+        ctx.lineWidth = 3;
+        const mark = (x1, y1, x2, y2) => { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); };
+        ctx.strokeStyle = '#0066ff';
+        for (let y = minY; y <= maxY; y++) {           // west column → city edge
+          const py = (maxY - y) * cellSize + 20;
+          mark(80 + 1.5, py, 80 + 1.5, py + cellSize);
+        }
+        for (let x = minX; x <= maxX; x++) {           // north row → city edge
+          const px = (x - minX) * cellSize + 80;
+          mark(px, 20 + 1.5, px + cellSize, 20 + 1.5);
+        }
+        ctx.strokeStyle = '#ff8c00';
+        for (let y = minY; y <= maxY; y++) {           // east column → double road
+          const px = (maxX - minX) * cellSize + 80, py = (maxY - y) * cellSize + 20;
+          mark(px + cellSize - 1.5, py, px + cellSize - 1.5, py + cellSize);
+        }
+        for (let x = minX; x <= maxX; x++) {           // south row → double road
+          const px = (x - minX) * cellSize + 80, py = (maxY - minY) * cellSize + 20;
+          mark(px, py + cellSize - 1.5, px + cellSize, py + cellSize - 1.5);
+        }
       }
 
       // Axis labels
@@ -345,6 +375,14 @@
         cbdText += (cbdText ? ' · ' : '') + 'ESTATE-LOCKED: "' + est.name + '" (' + est.size + ' parcels, owner ' + est.owner + (est.onSale ? ', ON SALE ' + est.priceMana.toLocaleString() + ' MANA' : '') + ')';
       }
       document.getElementById('cbd').textContent = cbdText;
+      const edges = [];
+      if (x === minX) edges.push('city edge (W)');
+      if (y === maxY) edges.push('city edge (N)');
+      if (x === maxX) edges.push('double road (E)');
+      if (y === minY) edges.push('double road (S)');
+      document.getElementById('border').textContent = edges.length
+        ? '🧭 BORDER PREMIUM: ' + edges.join(' + ') + (edges.length > 1 ? ' — CORNER' : '') + ' · no neighbor can ever build on this side'
+        : '';
       const L = listings.get(x + ',' + y);
       document.getElementById('listing').textContent = L
         ? '🟢 FOR SALE: ' + L.eth + ' ETH  ·  ' + L.mana.toLocaleString() + ' MANA ($' + L.usd.toLocaleString() + ')  ·  ' + (L.mk || 'DCL') + (L.estate ? '  [' + L.estate + ']' : '') + (L.wash ? '   ⚠ SELLER FLAGGED AS WASH-TRADER: ' + L.washLabel : '')
