@@ -17,6 +17,7 @@
   <div id="map"><canvas id="canvas"></canvas></div>
 
   <div id="layer-toggles" style="max-width: 960px; background: white; margin-top: 20px; padding: 12px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 13px;">
+    <div id="cbd-sync" style="margin-bottom:6px; color:#00204d; font-weight:bold;">CBD hatching: loading from cbd-map database…</div>
     <strong>Layers</strong> <span style="color:#666;">(last-sale price, USD at time of sale — darker = cheaper, brighter = pricier):</span><br>
     <label><input type="checkbox" data-layer="b1"> <span class="sw" style="background:#00204d;"></span>&lt;$75</label>
     <label><input type="checkbox" data-layer="b2"> <span class="sw" style="background:#4d6398;"></span>$75–100</label>
@@ -32,8 +33,7 @@
     <label><input type="checkbox" data-layer="border"> <span class="sw" style="background:#fff; border-left:4px solid #0066ff; border-right:4px solid #ff8c00; box-sizing:border-box;"></span>Border parcels</label>
     <span style="white-space:nowrap;"><span class="sw" style="background:#fff; border:2px solid #ff1a1a; box-sizing:border-box;"></span><span style="color:#666;">= wash-trader listing (shows with For sale)</span></span>
     <br><span style="color:#666;">Border: <span style="color:#0066ff; font-weight:bold;">blue</span> = city edge (W&nbsp;x=−150, N&nbsp;y=150) · <span style="color:#ff8c00; font-weight:bold;">orange</span> = double road (E, S) — exposed sides no neighbor can ever build on</span>
-    <div style="margin-top:6px; color:#666;">💡 Ctrl+Click (Cmd+Click on Mac) any parcel → its marketplace page (estate parcels open the whole estate, since they can't be bought individually)</div>
-    <div id="cbd-sync" style="margin-top:6px; color:#00204d; font-weight:bold;">CBD hatching: loading from cbd-map database…</div>
+    <div style="margin-top:6px; color:#666;">💡 Ctrl+Click (Cmd+Click on Mac) to open any parcel/estate</div>
   </div>
 
   <div id="offer-tool" style="max-width: 720px; background: white; margin-top: 20px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 14px;">
