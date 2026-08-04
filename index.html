@@ -148,11 +148,16 @@ const EDGE_VERIFY = SUPABASE_URL + '/functions/v1/verify-admin';
 // ── Admin session state ───────────────────────────────────────
 let adminToken = null;
 let adminTokenTime = null;
+let adminRole = null; // 'admin' | 'editor'
 const ADMIN_TTL = 4 * 60 * 60 * 1000; // 4 hours
 
 function isAdmin(){
   if(!adminToken || !adminTokenTime) return false;
   return (Date.now() - adminTokenTime) < ADMIN_TTL;
+}
+// Full admin only — gates actions editors shouldn't have (e.g. Undo).
+function isFullAdmin(){
+  return isAdmin() && adminRole === 'admin';
 }
 const HEADERS = {
   'apikey': SUPABASE_KEY,
@@ -669,7 +674,7 @@ function renderHistory(rows){
       +'<span class="hist-name">'+next+'</span>'
       +'<span class="hist-time">'+time+'</span>';
     const btn = document.createElement('button');
-    btn.className = 'hist-undo' + (isAdmin() ? ' admin-only' : '');
+    btn.className = 'hist-undo' + (isFullAdmin() ? ' admin-only' : '');
     btn.textContent = 'Undo';
     btn.addEventListener('click', ()=> undoHistory(r.id, r.x, r.y, prev));
     row.appendChild(btn);
@@ -678,7 +683,7 @@ function renderHistory(rows){
 }
 
 async function undoHistory(id, x, y, prev){
-  if(!isAdmin()){ alert('Admin session expired. Please log in again.'); return; }
+  if(!isFullAdmin()){ alert('Only the admin password can undo history. Please log in with admin access.'); return; }
   const owner = (prev === '—' || prev === '') ? '' : prev;
   try{
     if(owner){
@@ -709,11 +714,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('lock-btn').addEventListener('click', async()=>{
     if(isAdmin()){
       // Already unlocked — toggle off
-      adminToken = null; adminTokenTime = null;
+      adminToken = null; adminTokenTime = null; adminRole = null;
       updateAdminUI(false);
       return;
     }
-    const pw = prompt('Enter admin password:');
+    const pw = prompt('Enter password:');
     if(!pw) return;
     try{
       const res = await fetch(EDGE_VERIFY, {
@@ -729,8 +734,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(data.success){
         adminToken = data.token;
         adminTokenTime = Date.now();
+        adminRole = data.role || 'admin'; // fallback keeps old single-password deploys working
         updateAdminUI(true);
-        setStatus('Admin mode active — edit controls unlocked','ok');
+        setStatus((adminRole==='admin' ? 'Admin' : 'Editor')+' mode active — edit controls unlocked','ok');
       } else {
         alert('Incorrect password.');
       }
@@ -748,6 +754,7 @@ function updateAdminUI(isAdminNow){
   if(isAdminNow){
     btn.textContent='🔓 Edit mode';
     btn.classList.add('unlocked');
+    badge.textContent = (adminRole==='admin' ? 'ADMIN' : 'EDITOR');
     badge.style.display='inline';
     controls.style.display='block';
     locked.style.display='none';
