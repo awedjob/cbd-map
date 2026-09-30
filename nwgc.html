@@ -410,8 +410,8 @@
 
     // ── Offer Price Converter ────────────────────────────────────────────
     const FAIR_LOW_USD = 64, FAIR_HIGH_USD = 85;
-    // Fallback rates (approx July 2026) used if the live fetch fails
-    let ethUsd = 1691, manaUsd = 0.0644, ratesLive = false;
+    // Fallback rates (approx late Sep 2026) used if the live fetch fails
+    let ethUsd = 2670, manaUsd = 0.0886, ratesLive = false;
 
     function fmtEth(v) { return v.toFixed(4) + ' ETH'; }
     function fmtMana(v) { return Math.round(v).toLocaleString() + ' MANA'; }
@@ -436,12 +436,18 @@
     document.getElementById('count-in').addEventListener('input', updateConverter);
     updateConverter();
 
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,decentraland&vs_currencies=usd')
-      .then(r => r.json())
-      .then(d => {
-        if (d.ethereum && d.ethereum.usd) ethUsd = d.ethereum.usd;
-        if (d.decentraland && d.decentraland.usd) manaUsd = d.decentraland.usd;
-        ratesLive = true;
+    // Live rates: try CoinGecko, fall back to Coinbase (CoinGecko's keyless API rate-limits)
+    async function fetchRates() {
+      try {
+        const d = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,decentraland&vs_currencies=usd').then(r => r.json());
+        if (d.ethereum?.usd && d.decentraland?.usd) return [d.ethereum.usd, d.decentraland.usd];
+      } catch (e) {}
+      const spot = c => fetch('https://api.coinbase.com/v2/prices/' + c + '-USD/spot').then(r => r.json()).then(d => parseFloat(d.data.amount));
+      return Promise.all([spot('ETH'), spot('MANA')]);
+    }
+    fetchRates()
+      .then(([eth, mana]) => {
+        if (eth > 0 && mana > 0) { ethUsd = eth; manaUsd = mana; ratesLive = true; }
         updateConverter();
       })
       .catch(() => updateConverter());
