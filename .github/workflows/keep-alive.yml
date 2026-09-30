@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: '0 12 */5 * *'  # Runs every 5 days at noon UTC
+    - cron: '17 12 * * *'   # Daily at 12:17 UTC (every 5 days wasn't enough; project paused Sep 2026)
   workflow_dispatch:          # Allows you to run it manually too
 
 jobs:
@@ -10,8 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Supabase
+        env:
+          URL: https://zynbfeqjkafgcaguoqbd.supabase.co/rest/v1
+          KEY: sb_publishable_Rz-sbZJDOFamXlve5ayMjw_4x7wB1F3
         run: |
-          curl -s -o /dev/null -w "%{http_code}" \
-            "https://zynbfeqjkafgcaguoqbd.supabase.co/rest/v1/parcels?select=id&limit=1" \
-            -H "apikey: sb_publishable_Rz-sbZJDOFamXlve5ayMjw_4x7wB1F3" \
-            -H "Authorization: Bearer sb_publishable_Rz-sbZJDOFamXlve5ayMjw_4x7wB1F3"
+          # --fail makes non-2xx responses fail the job so a paused project shows up as a red run
+          for table in parcels history; do
+            code=$(curl -sS --fail --retry 3 --retry-delay 10 -o /dev/null -w "%{http_code}" \
+              "$URL/$table?select=*&limit=1" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+            echo "$table: HTTP $code"
+          done
